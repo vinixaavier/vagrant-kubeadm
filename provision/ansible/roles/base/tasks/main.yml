@@ -1,0 +1,68 @@
+---
+# tasks file for base
+
+- selinux:
+    state: disabled
+
+- shell: swapoff -a > /etc/swapoff.ok
+  args:
+    creates: /etc/swapoff.ok
+
+- yum_repository:
+    state: present
+    name: docker-ce-stable
+    description: Docker CE Stable - $basearch
+    baseurl: https://download.docker.com/linux/centos/7/$basearch/stable
+    enabled: yes
+    gpgcheck: yes
+    gpgkey: https://download.docker.com/linux/centos/gpg
+
+- package:
+    state: latest
+    name: docker-ce
+
+- template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: 0600
+
+- service:
+    state: started
+    name: docker
+    enabled: yes
+
+- yum_repository:
+    state: present
+    name: kubernetes
+    description: Kubernetes
+    baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+    enabled: yes
+    gpgcheck: yes
+    repo_gpgcheck: yes
+    gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+
+- package:
+    state: latest
+    name: "{{ item }}"
+  with_items:
+    - kubelet
+    - kubeadm
+    - kubectl
+
+- service:
+    state: started
+    name: kubelet
+    enabled: yes
+
+- sysctl:
+    name: "{{ item }}"
+    value: 1
+    state: present
+    ignoreerrors: yes
+  with_items:
+    - net.bridge.bridge-nf-call-ip6tables
+    - net.bridge.bridge-nf-call-iptables
+
+...

@@ -1,0 +1,4 @@
+.vagrant
+build
+.DS_Store
+*.retry
