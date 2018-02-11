@@ -5,6 +5,9 @@
 
 - shell: kubeadm init --pod-network-cidr=10.32.0.0/12 --apiserver-advertise-address=192.168.200.10 --token=b0f7b8.8d1767876297d85c
 
+- pause:
+    minutes: 5
+    
 - file: 
     state: directory
     path: /root/.kube 

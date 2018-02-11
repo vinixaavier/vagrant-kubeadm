@@ -21,6 +21,13 @@
     state: latest
     name: docker-ce
 
+- file:
+    state: directory
+    path: /etc/docker
+    owner: root
+    group: root
+    mode: 0700
+
 - template:
     src: daemon.json.j2
     dest: /etc/docker/daemon.json
