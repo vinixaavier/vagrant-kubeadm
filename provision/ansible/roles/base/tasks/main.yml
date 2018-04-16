@@ -8,7 +8,7 @@
 
 - lineinfile: 
     dest: /etc/fstab
-    regexp: '^/[\S]+\s+none\s+swap '
+    regexp: swap
     state: absent
 
 - yum_repository:
