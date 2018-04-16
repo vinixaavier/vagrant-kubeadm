@@ -5,8 +5,8 @@ global:
   landrush: true
   domain: lab.com.br
   network_prefix: 192.168.200
-  memory: 1024
-  cpus: 1
+  memory: 2048
+  cpus: 2
   box: centos/7
 
 hosts:

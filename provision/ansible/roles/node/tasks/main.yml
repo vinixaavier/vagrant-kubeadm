@@ -1,7 +1,7 @@
 ---
 # tasks file for node
 
-- shell: "kubeadm reset"
+- shell: kubeadm reset
 
 - shell: kubeadm join --token b0f7b8.8d1767876297d85c 192.168.200.10:6443 --discovery-token-unsafe-skip-ca-verification
 

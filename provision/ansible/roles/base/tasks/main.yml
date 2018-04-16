@@ -4,9 +4,12 @@
 - selinux:
     state: disabled
 
-- shell: swapoff -a > /etc/swapoff.ok
-  args:
-    creates: /etc/swapoff.ok
+- shell: swapoff -a
+
+- lineinfile: 
+    dest: /etc/fstab
+    regexp: '^/[\S]+\s+none\s+swap '
+    state: absent
 
 - yum_repository:
     state: present
@@ -20,20 +23,6 @@
 - package:
     state: latest
     name: docker-ce
-
-- file:
-    state: directory
-    path: /etc/docker
-    owner: root
-    group: root
-    mode: 0700
-
-- template:
-    src: daemon.json.j2
-    dest: /etc/docker/daemon.json
-    owner: root
-    group: root
-    mode: 0600
 
 - service:
     state: started
@@ -58,9 +47,15 @@
     - kubeadm
     - kubectl
 
-- service:
+- replace: 
+    path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+    regexp: cgroup-driver=systemd
+    replace: cgroup-driver=cgroupfs
+
+- systemd:
     state: started
     name: kubelet
+    daemon_reload: yes
     enabled: yes
 
 - sysctl:
