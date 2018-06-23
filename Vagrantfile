@@ -18,6 +18,7 @@ global_memory = global_settings['memory']
 global_cpus = global_settings['cpus']
 global_box = global_settings['box']
 
+
 # Store all hosts
 hosts = environment['hosts']
 
@@ -31,7 +32,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.landrush.tld = domain
   end
 
-  config.vm.synced_folder '.', '/vagrant', type: 'nfs'
+  config.vm.synced_folder '.', '/vagrant', type: 'nfs', nfs_udp: false
 
   # Loop to provisioning all hosts in environment yaml file
   hosts.each_with_index do |host, index|
@@ -53,11 +54,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       # Settings of each host in VirtualBox 
       define.vm.provider 'virtualbox' do |virtualbox|
         virtualbox.name = hostname
-
+	
         # Checking if is global settings or host settings
         if cpus then virtualbox.cpus = cpus else virtualbox.cpus = global_cpus end
         if memory then virtualbox.memory = memory else virtualbox.memory = global_memory end
         if linked_clone then virtualbox.linked_clone = true end
+
       end
 
       define.vm.provision :hosts, :sync_hosts => true

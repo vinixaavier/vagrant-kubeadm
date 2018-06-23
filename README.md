@@ -7,7 +7,7 @@ This repository create a cluster of Kubernetes using Kubeadm provisioning machin
 The tools that were used to automate the creation of the cluster were:
 
 - Ansible latest version installed by pip in guests machines;
-- Vagrant latest version 2.0.2;
+- Vagrant latest version 2.0.2 with vagrant-hosts plugin installed;
 - Kubernetes tools latest version 1.9;
 
 ## Get started
